@@ -3,7 +3,7 @@ module github.com/containers/buildah
 go 1.13
 
 require (
-	github.com/containerd/containerd v1.6.0
+	github.com/containerd/containerd v1.6.1
 	github.com/containernetworking/cni v1.0.1
 	github.com/containers/common v0.47.4
 	github.com/containers/image/v5 v5.19.1
@@ -13,7 +13,7 @@ require (
 	github.com/docker/docker v20.10.12+incompatible
 	github.com/docker/go-units v0.4.0
 	github.com/docker/libnetwork v0.8.0-dev.2.0.20190625141545-5a177b73e316
-	github.com/fsouza/go-dockerclient v1.7.8
+	github.com/fsouza/go-dockerclient v1.7.10
 	github.com/ghodss/yaml v1.0.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/ishidawataru/sctp v0.0.0-20210226210310-f2269e66cdee // indirect
