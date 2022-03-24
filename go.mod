@@ -8,7 +8,7 @@ require (
 	github.com/containers/common v0.47.4
 	github.com/containers/image/v5 v5.19.1
 	github.com/containers/ocicrypt v1.1.2
-	github.com/containers/storage v1.38.2
+	github.com/containers/storage v1.39.0
 	github.com/docker/distribution v2.8.0+incompatible
 	github.com/docker/docker v20.10.12+incompatible
 	github.com/docker/go-units v0.4.0
@@ -33,7 +33,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/pflag v1.0.5
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	github.com/syndtr/gocapability v0.0.0-20200815063812-42c35b437635
 	go.etcd.io/bbolt v1.3.6
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
