@@ -8,7 +8,7 @@ require (
 	github.com/containers/common v0.49.1
 	github.com/containers/image/v5 v5.22.0
 	github.com/containers/ocicrypt v1.1.5
-	github.com/containers/storage v1.42.0
+	github.com/containers/storage v1.43.0
 	github.com/docker/distribution v2.8.1+incompatible
 	github.com/docker/docker v20.10.18+incompatible
 	github.com/docker/go-units v0.5.0
@@ -80,7 +80,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/miekg/pkcs11 v1.1.1 // indirect
-	github.com/mistifyio/go-zfs v2.1.2-0.20190413222219-f784269be439+incompatible // indirect
+	github.com/mistifyio/go-zfs/v3 v3.0.0 // indirect
 	github.com/moby/sys/mount v0.3.3 // indirect
 	github.com/moby/sys/mountinfo v0.6.2 // indirect
 	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6 // indirect
