@@ -8,7 +8,7 @@ require (
 	github.com/containers/common v0.51.0
 	github.com/containers/image/v5 v5.24.1
 	github.com/containers/ocicrypt v1.1.7
-	github.com/containers/storage v1.45.3
+	github.com/containers/storage v1.45.4
 	github.com/cyphar/filepath-securejoin v0.2.3
 	github.com/docker/distribution v2.8.1+incompatible
 	github.com/docker/docker v23.0.0+incompatible
@@ -22,7 +22,7 @@ require (
 	github.com/opencontainers/go-digest v1.0.0
 	github.com/opencontainers/image-spec v1.1.0-rc2
 	github.com/opencontainers/runc v1.1.4
-	github.com/opencontainers/runtime-spec v1.0.3-0.20220825212826-86290f6a00fb
+	github.com/opencontainers/runtime-spec v1.1.0-rc.1
 	github.com/opencontainers/runtime-tools v0.9.1-0.20221014010322-58c91d646d86
 	github.com/opencontainers/selinux v1.11.0
 	github.com/openshift/imagebuilder v1.2.4-0.20230214035213-86828bf48fa2
@@ -43,7 +43,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1 // indirect
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/Microsoft/go-winio v0.6.0 // indirect
-	github.com/Microsoft/hcsshim v0.9.6 // indirect
+	github.com/Microsoft/hcsshim v0.9.7 // indirect
 	github.com/VividCortex/ewma v1.2.0 // indirect
 	github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d // indirect
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
@@ -51,7 +51,7 @@ require (
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/container-orchestrated-devices/container-device-interface v0.5.3 // indirect
 	github.com/containerd/cgroups v1.0.4 // indirect
-	github.com/containerd/stargz-snapshotter/estargz v0.13.0 // indirect
+	github.com/containerd/stargz-snapshotter/estargz v0.14.1 // indirect
 	github.com/containernetworking/plugins v1.2.0 // indirect
 	github.com/containers/libtrust v0.0.0-20230121012942-c1716e8a8d01 // indirect
 	github.com/cyberphone/json-canonicalization v0.0.0-20220623050100-57a0ce2678a7 // indirect
@@ -114,7 +114,7 @@ require (
 	github.com/sigstore/sigstore v1.5.1 // indirect
 	github.com/stefanberger/go-pkcs11uri v0.0.0-20201008174630-78d3cae3a980 // indirect
 	github.com/sylabs/sif/v2 v2.9.0 // indirect
-	github.com/tchap/go-patricia v2.3.0+incompatible // indirect
+	github.com/tchap/go-patricia/v2 v2.3.1 // indirect
 	github.com/theupdateframework/go-tuf v0.5.2-0.20221207161717-9cb61d6e65f5 // indirect
 	github.com/titanous/rocacheck v0.0.0-20171023193734-afe73141d399 // indirect
 	github.com/ulikunitz/xz v0.5.11 // indirect
