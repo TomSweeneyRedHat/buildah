@@ -3,7 +3,7 @@ module github.com/containers/buildah
 go 1.17
 
 require (
-	github.com/containerd/containerd v1.6.17
+	github.com/containerd/containerd v1.6.19
 	github.com/containernetworking/cni v1.1.2
 	github.com/containers/common v0.51.0
 	github.com/containers/image/v5 v5.24.1
@@ -43,7 +43,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1 // indirect
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/Microsoft/go-winio v0.6.0 // indirect
-	github.com/Microsoft/hcsshim v0.9.6 // indirect
+	github.com/Microsoft/hcsshim v0.9.7 // indirect
 	github.com/VividCortex/ewma v1.2.0 // indirect
 	github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d // indirect
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
