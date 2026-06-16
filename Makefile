@@ -30,6 +30,8 @@ RACEFLAGS ?= $(shell $(GO_TEST) -race ./pkg/dummy > /dev/null 2>&1 && echo -race
 COMMIT_NO ?= $(shell git rev-parse HEAD 2> /dev/null || true)
 GIT_COMMIT ?= $(if $(shell git status --porcelain --untracked-files=no),${COMMIT_NO}-dirty,${COMMIT_NO})
 SOURCE_DATE_EPOCH ?= $(if $(shell date +%s),$(shell date +%s),$(error "date failed"))
+EPOCH_TEST_COMMIT ?= $(shell git merge-base $${DEST_BRANCH:-main} HEAD)
+HEAD ?= HEAD
 
 # we get GNU make 3.x in MacOS build envs, which wants # to be escaped in
 # strings, while the 4.x we have on Linux doesn't. this is the documented
@@ -133,6 +135,7 @@ validate: install.tools
 	./tests/validate/whitespace.sh
 	./hack/xref-helpmsgs-manpages
 	./tests/validate/pr-should-include-tests
+	./tests/validate/commit-subject-check.sh $(EPOCH_TEST_COMMIT)..$(HEAD)
 
 .PHONY: install.tools
 install.tools:
