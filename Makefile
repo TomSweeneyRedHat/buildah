@@ -131,7 +131,7 @@ codespell:
 	codespell -w
 
 .PHONY: validate
-validate: all install.tools codespell
+validate: all install.tools lint codespell
 	./tests/validate/whitespace.sh
 	./hack/xref-helpmsgs-manpages
 	./tests/validate/pr-should-include-tests
