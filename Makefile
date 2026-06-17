@@ -124,22 +124,26 @@ clean:
 	$(MAKE) -C docs clean
 
 .PHONY: docs
-docs: install.tools ## build the docs on the host
+docs: install.go-md2man ## build the docs on the host
 	$(MAKE) -C docs
 
 codespell:
 	codespell -w
 
 .PHONY: validate
-validate: all install.tools lint codespell
+validate: all lint codespell
 	./tests/validate/whitespace.sh
 	./hack/xref-helpmsgs-manpages
 	./tests/validate/pr-should-include-tests
 	./tests/validate/commit-subject-check.sh $(EPOCH_TEST_COMMIT)..$(HEAD)
 
-.PHONY: install.tools
-install.tools:
-	$(MAKE) -C tests/tools
+.PHONY: install.go-md2man
+install.go-md2man:
+	$(MAKE) -C tests/tools build/go-md2man
+
+.PHONY: install.golangci-lint
+install.golangci-lint:
+	$(MAKE) -C tests/tools build/golangci-lint
 
 .PHONY: install
 install:
@@ -163,7 +167,7 @@ test-conformance: tests/conformance/testdata/mount-targets/true
 	$(GO_TEST) -v -tags "$(STORAGETAGS) $(SECURITYTAGS)" -cover -timeout 60m ./tests/conformance
 
 .PHONY: test-integration
-test-integration: install.tools
+test-integration: all
 	cd tests; ./test_runner.sh
 
 tests/testreport/testreport: tests/testreport/testreport.go
@@ -196,9 +200,13 @@ vendor:
 	if test -n "$(strip $(shell $(GO) env GOTOOLCHAIN))"; then go mod edit -toolchain none ; fi
 
 .PHONY: lint
-lint: install.tools
+lint: install.golangci-lint
 	./tests/tools/build/golangci-lint run $(LINTFLAGS)
 	./tests/tools/build/golangci-lint run --tests=false $(LINTFLAGS)
+
+.PHONY: fmt
+fmt: install.golangci-lint
+	./tests/tools/build/golangci-lint fmt $(LINTFLAGS)
 
 # CAUTION: This is not a replacement for RPMs provided by your distro.
 # Only intended to build and test the latest unreleased changes.
