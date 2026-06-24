@@ -243,6 +243,16 @@ func after(cmd *cobra.Command) error {
 }
 
 func main() {
+	// Not a NOP, see https://github.com/podman-container-tools/buildah/issues/6903.
+	// This is a work around for a bug in the storage library as it does not properly
+	// init IsRootless() there and calls it only in the new chroot without a mounted
+	// /proc making it fail.
+	// Because IsRootless() uses a cache we just need to call it once here to avoid
+	// this problem.
+	// The proper storage fix was done for main here:
+	// https://github.com/podman-container-tools/container-libs/pull/908
+	_ = unshare.IsRootless()
+
 	if buildah.InitReexec() {
 		return
 	}
