@@ -30,6 +30,7 @@ import (
 	"github.com/containers/buildah/define"
 	"github.com/containers/buildah/imagebuildah"
 	"github.com/containers/buildah/internal/config"
+	dockerapi "github.com/docker/docker/api"
 	dockerbuildtypes "github.com/docker/docker/api/types/build"
 	dockerdockerclient "github.com/docker/docker/client"
 	docker "github.com/fsouza/go-dockerclient"
@@ -184,6 +185,7 @@ func TestConformance(t *testing.T) {
 						test.dockerBuilderVersion = docker.BuilderV1
 						test.compatVolumes = types.OptionalBoolTrue
 						test.compatScratchConfig = types.OptionalBoolTrue
+						test.fsSkip = slices.Concat(test.fsSkip, test.fsSkipCompatVolumesTrue)
 					})
 				})
 			} else {
@@ -340,7 +342,7 @@ func testConformanceInternal(t *testing.T, dateStamp string, testIndex int, muta
 	}
 
 	// connect to dockerd using go-dockerclient
-	client, err := docker.NewClientFromEnv()
+	client, err := docker.NewVersionedClientFromEnv(dockerapi.DefaultVersion)
 	require.NoError(t, err, "unable to initialize docker client")
 	var dockerVersion []string
 	if version, err := client.Version(); err == nil {
@@ -887,7 +889,7 @@ type FSTree struct {
 type Layer struct {
 	UncompressedDigest digest.Digest `json:"uncompressed-digest,omitempty"`
 	CompressedDigest   digest.Digest `json:"compressed-digest,omitempty"`
-	Headers            []FSHeader    `json:"-,omitempty"`
+	Headers            []FSHeader    `json:"-"`
 }
 
 // FSHeader is the parts of the tar.Header for an entry in a layer blob that
@@ -1343,10 +1345,10 @@ func compareJSON(a, b map[string]any, skip []string) (missKeys, leftKeys, diffKe
 func configCompareResult(miss, left, diff []string, notDocker string) string {
 	var buffer bytes.Buffer
 	if len(miss) > 0 {
-		buffer.WriteString(fmt.Sprintf("Fields missing from %s version: %s\n", notDocker, strings.Join(miss, " ")))
+		fmt.Fprintf(&buffer, "Fields missing from %s version: %s\n", notDocker, strings.Join(miss, " "))
 	}
 	if len(left) > 0 {
-		buffer.WriteString(fmt.Sprintf("Fields which only exist in %s version: %s\n", notDocker, strings.Join(left, " ")))
+		fmt.Fprintf(&buffer, "Fields which only exist in %s version: %s\n", notDocker, strings.Join(left, " "))
 	}
 	if len(diff) > 0 {
 		buffer.WriteString("Fields present in both versions have different values:\n")
@@ -1375,10 +1377,10 @@ func fsCompareResult(miss, left, diff []string, notDocker string) string {
 		return n
 	}
 	if len(miss) > 0 {
-		buffer.WriteString(fmt.Sprintf("Content missing from %s version: %s\n", notDocker, strings.Join(fixup(miss), " ")))
+		fmt.Fprintf(&buffer, "Content missing from %s version: %s\n", notDocker, strings.Join(fixup(miss), " "))
 	}
 	if len(left) > 0 {
-		buffer.WriteString(fmt.Sprintf("Content which only exists in %s version: %s\n", notDocker, strings.Join(fixup(left), " ")))
+		fmt.Fprintf(&buffer, "Content which only exists in %s version: %s\n", notDocker, strings.Join(fixup(left), " "))
 	}
 	if len(diff) > 0 {
 		buffer.WriteString("File attributes in both versions have different values:\n")
@@ -1424,7 +1426,9 @@ type (
 		compatLayerOmissions types.OptionalBool        // value to set for the buildah CompatLayerOmissions flag
 		transientMounts      []string                  // one possible buildah-specific feature
 		fsSkip               []string                  // expected filesystem differences, typically timestamps on files or directories we create or modify during the build and don't reset
-		buildArgs            map[string]string         // build args to supply, as if --build-arg was used
+
+		fsSkipCompatVolumesTrue []string          // more expected filesystem differences when compatVolumes=true
+		buildArgs               map[string]string // build args to supply, as if --build-arg was used
 	}
 )
 
@@ -3641,9 +3645,10 @@ var internalTestCases = []testCase{
 	},
 
 	{
-		name:             "chown-volume", // from podman #22530
-		contextDir:       "chown-volume",
-		testUsingVolumes: true,
+		name:                    "chown-volume", // from podman #22530
+		contextDir:              "chown-volume",
+		testUsingVolumes:        true,
+		fsSkipCompatVolumesTrue: []string{"(dir):volumea:mtime", "(dir):volumeb:mtime", "(dir):volumec:mtime"},
 	},
 
 	{
@@ -3816,15 +3821,23 @@ func TestCommit(t *testing.T) {
 			description: "expose just config",
 			baseImage:   "mirror.gcr.io/busybox",
 			config: &docker.Config{
-				ExposedPorts: map[docker.Port]struct{}{"23456": {}},
+				ExposedPorts: map[docker.Port]struct{}{"23456/tcp": {}},
 			},
 		},
 		{
-			description: "expose union",
+			description: "expose union implicit",
 			baseImage:   "mirror.gcr.io/busybox",
 			changes:     []string{"EXPOSE 12345"},
 			config: &docker.Config{
-				ExposedPorts: map[docker.Port]struct{}{"23456": {}},
+				ExposedPorts: map[docker.Port]struct{}{"23456/tcp": {}},
+			},
+		},
+		{
+			description: "expose union explicit",
+			baseImage:   "mirror.gcr.io/busybox",
+			changes:     []string{"EXPOSE 12345/tcp"},
+			config: &docker.Config{
+				ExposedPorts: map[docker.Port]struct{}{"23456/tcp": {}},
 			},
 		},
 		{
